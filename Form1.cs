@@ -137,7 +137,7 @@ namespace Nmaereport2
 
                         //It's not working,but I can't find reason,so I use other way
                         //這要畫框線沒用只有對最後一個有用 不知道為啥
-                        //var TestIndex = row.Index;
+                        //var TestIndex = row.Index; 
                         //table.Cell(TestIndex, i).Range.Borders[WdBorderType.wdBorderBottom].LineWidth = WdLineWidth.wdLineWidth150pt;
                     }
                 }
