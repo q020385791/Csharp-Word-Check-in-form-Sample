@@ -15,11 +15,12 @@ namespace Nmaereport2
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            button1.Enabled = false;
+            
             Object oMissing = System.Reflection.Missing.Value;
             Object oEndOfDoc = "\\endofdoc";
             Microsoft.Office.Interop.Word.Application wrdApp;
-
+            
             Microsoft.Office.Interop.Word._Document myDoc;
             wrdApp = new Microsoft.Office.Interop.Word.Application();
             //執行過程不在畫面上開啟 Word
@@ -86,7 +87,7 @@ namespace Nmaereport2
             Table table = oPara.Range.Tables.Add(wrdApp.Selection.Range, 1, 6, oMissing, ref oMissing);
 
             //每一行的高度
-            table.Rows.Height = 25f;
+            table.Rows.Height = DeFaultHeight;
 
             //內框線樣式
             table.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
@@ -155,37 +156,44 @@ namespace Nmaereport2
                     }
                 }
             }
-                string dummyFileName = "SaveHere";
+                //string dummyFileName = "SaveHere";
 
                 SaveFileDialog sf = new SaveFileDialog();
-                sf.FileName = dummyFileName;
+                //sf.FileName = dummyFileName;
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
+                label3.Text = "請稍後 產檔中";
                     string savePath = Path.GetDirectoryName(sf.FileName);
                     //另存文件
-                    Object oSavePath = savePath+"\\"+ dummyFileName;    //存檔路徑
+                    Object oSavePath =  sf.FileName;    //存檔路徑
                     Object oFormat = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatDocument;    //格式
+
+                try
+                {
                     myDoc.SaveAs(ref oSavePath, ref oFormat,
                                 ref oMissing, ref oMissing, ref oMissing, ref oMissing,
                                 ref oMissing, ref oMissing, ref oMissing, ref oMissing,
                                 ref oMissing, ref oMissing, ref oMissing, ref oMissing,
                                 ref oMissing, ref oMissing
                             );
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
                     //關閉檔案
                     Object oFalse = false;
                     myDoc.Close(ref oFalse, ref oMissing, ref oMissing);
                     Console.WriteLine("創建完畢");
+                label3.Text = "創建完畢，檔案位置:"+ oSavePath;
+                button1.Enabled = true;
+                wrdApp.Quit();
                 }
 
-                
-
-            
-
-
-
-
+        
         }
-
+        public float DeFaultHeight = 32f;
         private void Form1_Load(object sender, EventArgs e)
         {
             //年份初始值
@@ -200,9 +208,23 @@ namespace Nmaereport2
                 cbMonth.Items.Add(i);
             }
             cbMonth.Text = DateTime.Now.Month.ToString();
+            //欄高初始值
+
+            
+            for (int i = 0; i < 20; i++)
+            {
+                cbCellHeight.Items.Add(DeFaultHeight-10+i);
+            }
+            cbCellHeight.Text = 32.ToString();
 
 
 
+
+        }
+
+        private void cbCellHeight_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DeFaultHeight = Convert.ToInt64(cbCellHeight.Text);
         }
     }
 }
