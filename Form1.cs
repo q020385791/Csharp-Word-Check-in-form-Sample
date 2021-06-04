@@ -72,7 +72,7 @@ namespace Nmaereport2
             oPara.Range.Text = (Year - 1911).ToString() + "年" + month + "月份              廠商駐點簽到表";
             oPara.Range.InsertParagraphAfter();
 
-            //移动焦点
+            //移動焦点
             wrdApp.Selection.MoveDown(ref WdLine, ref count, ref oMissing);
 
             //字體大小
